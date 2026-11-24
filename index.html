@@ -3561,13 +3561,19 @@ function render(){
     if(!appShellEl) return;
 
     if(state.signedOut){
-      appShellEl.classList.add('signed-out-mode');
-      var sidebarEl = document.getElementById('sidebar');
       var mainEl = document.getElementById('main');
+      var sidebarEl = document.getElementById('sidebar');
       var roleEl = document.getElementById('roleSelect');
+      appShellEl.classList.add('signed-out-mode');
       if(sidebarEl) sidebarEl.innerHTML = '';
       if(roleEl){ roleEl.innerHTML = '<option>Signed out</option>'; roleEl.disabled = true; }
       if(mainEl) mainEl.innerHTML = signedOutView();
+      else {
+        /* fallback: write directly to appShell if #main missing */
+        appShellEl.innerHTML =
+          '<header class="topbar" style="display:none"></header>'+
+          '<div class="body"><main class="main" id="main">'+signedOutView()+'</main></div>';
+      }
       return;
     }
     appShellEl.classList.remove('signed-out-mode');
